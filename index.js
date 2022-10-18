@@ -1,9 +1,26 @@
-getData().catch( error => { console.error(error); });
+const prevButton = document.getElementById("prev");
+const nextButton = document.getElementById("next");
+const myForm = document.getElementById("myForm");
+const reader = new FileReader();
 let waypointsOfRoutes = [];
 
-async function getData() {
-  const response = await fetch("test.csv");
-  const data = await response.text();
+myForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const [ myCSV ] = document.getElementById("csvFile").files;
+    if (myCSV) {
+        reader.readAsText(myCSV);
+    }
+})
+
+reader.addEventListener('load', () => {
+    // console.log(reader.result)
+    const data = reader.result;
+    getData(data).catch( error => { console.error(error); });
+}, false)
+
+async function getData(data) {
+  // const response = await fetch("test.csv");
+  // const data = await response.text();
   const rows = data.split(/\n|\r\n/).slice(1);
   rows.forEach((row) => {
     const columns = row.split(",");

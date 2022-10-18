@@ -10,16 +10,18 @@
   <body>
     <script src="./index.js" type="module"></script>
     <link rel="stylesheet" type="text/css" href="./index.css" />
-
-    <!-- <form id="myForm">
-      <input type="file" id="csvFile" accept=".csv" />
-      <br />
-      <input type="submit" value="Submit" />
-    </form> -->
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB02TAzAAb50lmkP3Qct4JlWOS9__AzUxs&libraries=places&callback=initMap&v=weekly"
       defer
     ></script>
+    
+    <form id="myForm">
+      <input type="file" id="csvFile" accept=".csv" />
+      <br />
+      <input type="submit" value="Submit" />
+    </form>
+    <button id="prev">Previous Route</button>
+    <button id="next">Next Route</button>
     <button id="go">Go</button>
     <div id="map"></div>
     <div id="directionsPanel"></div>
