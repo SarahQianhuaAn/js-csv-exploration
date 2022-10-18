@@ -1,22 +1,28 @@
-const prevButton = document.getElementById("prev");
-const nextButton = document.getElementById("next");
+// const prevButton = document.getElementById("prev");
+// const nextButton = document.getElementById("next");
 const myForm = document.getElementById("myForm");
 const reader = new FileReader();
 let waypointsOfRoutes = [];
 
-myForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const [ myCSV ] = document.getElementById("csvFile").files;
-    if (myCSV) {
-        reader.readAsText(myCSV);
-    }
-})
+myForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const [myCSV] = document.getElementById("csvFile").files;
+  if (myCSV) {
+    reader.readAsText(myCSV);
+  }
+});
 
-reader.addEventListener('load', () => {
+reader.addEventListener(
+  "load",
+  () => {
     // console.log(reader.result)
     const data = reader.result;
-    getData(data).catch( error => { console.error(error); });
-}, false)
+    getData(data).catch((error) => {
+      console.error(error);
+    });
+  },
+  false
+);
 
 async function getData(data) {
   // const response = await fetch("test.csv");
@@ -34,13 +40,13 @@ async function getData(data) {
 }
 
 function getWaypoints() {
-    let waypoints = []
-    waypointsOfRoutes.forEach(waypoint => {
-        let address = waypoint[2];
-        waypoints.push({location: address});
-    })
-    console.log(waypoints);
-    return waypoints;
+  let waypoints = [];
+  waypointsOfRoutes.forEach((waypoint) => {
+    let address = waypoint[2];
+    waypoints.push({ location: address });
+  });
+  console.log(waypoints);
+  return waypoints;
 }
 
 function calcRoute(directionsService, directionsRenderer) {
@@ -55,7 +61,7 @@ function calcRoute(directionsService, directionsRenderer) {
     if (status == google.maps.DirectionsStatus.OK) {
       directionsRenderer.setDirections(result);
     } else {
-        console.error("Direction request failed.");
+      console.error("Direction request failed.");
     }
   });
 }
@@ -71,10 +77,10 @@ function initMap() {
   directionsRenderer.setMap(map);
   directionsRenderer.setPanel(document.getElementById("directionsPanel"));
   calcRoute(directionsService, directionsRenderer);
-    var goButton = document.getElementById("go");
-    goButton.addEventListener("click", () =>
-      calcRoute(directionsService, directionsRenderer)
-    );
+  var goButton = document.getElementById("go");
+  goButton.addEventListener("click", () =>
+    calcRoute(directionsService, directionsRenderer)
+  );
 }
 
 window.initMap = initMap;

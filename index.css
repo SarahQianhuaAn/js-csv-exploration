@@ -1,4 +1,37 @@
+body {
+    display: block;
+    font-family: sans-serif;
+}
+
 #map {
     height: 400px;
     width: 100%;
+}
+
+h1 {
+    /* border: pink solid 1pt; */
+}
+
+form {
+    /* border: pink solid 1pt; */
+    margin: 0;
+}
+
+input {
+    margin: 0.2rem 0;
+    font-size: 1.2rem;
+}
+
+button {
+    /* border:pink solid 1pt; */
+    /* border-radius: 0.5rem; */
+    border: none;
+    font-size: 1.5rem;
+    margin: 0.5rem 0;
+    padding: 0.7rem;
+    background-color: rgb(228, 225, 225);
+}
+
+button:hover {
+    cursor: pointer;
 }
