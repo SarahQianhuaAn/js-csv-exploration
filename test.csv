@@ -1,0 +1,22 @@
+Route #,Stop #,Delivery Size,Geocoded Address,Name,Street Address,Street Address #2,City,Zip,Meals
+Route 1,1,,22752 Boltana Mission Viejo CA,New York Life Daniel Katzman,22752 Boltana,,Mission Viejo,92691,2
+Route 1,2,,27742 Vista Del Lago Mission Viejo CA,Demetry Team Coldwell Banker,27742 Vista Del Lago,,Mission Viejo,92692,1
+Route 1,3,,27792 Vista Del Lago Mission Viejo CA,Hacienda on the Lake,27792 Visa Del Lago,,Mission Viejo,92692,1
+Route 1,4,,27802 Vista Del Lago Mission Viejo CA,Domenico's on the Lake,27802 Vista Del Lago,Ste c26,Mission Viejo,92692,1
+Route 1,5,,28813 Los Alisos Blvd Mission Viejo CA,Ballpark Pizza Team,28813 Los Alisos Blvd,,Mission Viejo,92692,1
+Route 1,6,,28719 Los Alisos Blvd Mission Viejo CA,Piccolino Ristorante,28719 Los Alisos Blvd,,Mission Viejo,92692,1
+Route 1,7,,27695 Santa Margarita Pkwy Mission Viejo CA,Black Oak Pizzeria,27695 Santa Margarita Pkwy,,Mission Viejo,92691,1
+Route 1,8,,27775 Santa Margarita Pkwy Mission Viejo CA,Gemma's Jewelers,27775 Santa Margarita Pkwy,Ste C,Mission Viejo,92691,1
+Route 1,9,,26741 Portola Pkwy Lake Forest CA,Easy Fleet GPS,26741 Portola Pkwy,Ste 1E #668,Foothill Ranch,92610,1
+Route 1,10,,26632 Towne Centre Dr Lake Forest CA,The Le Firm,26632 Towne Centre Drive,#300,Lake Forest,92610,1
+Route 1,11,,27121 Towne Centre Dr Lake Forest CA,Cox,27121 Towne Center Drive,,Foothill Ranch,92610,1
+Route 1,12,,20331 Lake Forest Dr Lake Forest CA,Visiting Angels,20331 Lake Forest Dr,Ste C6,Lake Forest,92630,1
+Route 1,13,,27758 Santa Margarita Pkwy Mission Viejo CA,Parmenter Insurance,27758 Santa Margarita Pkwy,#283,Mission Viejo,92691,1
+Route 1,14,,27762 Santa Margarita Pkwy Mission Viejo CA,Aloha Stacks,27762 Santa Margarita Pkwy,,Mission Viejo,92691,1
+Route 1,15,,27758 Santa Margarita Pkwy Mission Viejo CA,Spirit League,27758 Santa Margarita Pkwy,#303,Mission Viejo,92691,1
+Route 1,16,,27738 Santa Margarita Pkwy Mission Viejo CA,The Joint Chiropractic,27738 Santa Margarita Pkwy,,Mission Viejo,92691,1
+Route 1,17,,30021 Tomas Rancho Santa Margarita CA,Computnet Technologies,30021 Tomas,Ste 120,RSM,92688,1
+Route 1,18,,22342 Avenida Empresa Rancho Santa Margarita CA,Edward Jones,22342 Avenida Empresa,Ste 240,RSM,92688,1
+Route 1,19,,29961 Santa Margarita Pkwy Rancho Santa Margarita CA,RSM Honda,29961 Santa Margarita Pkwy,,RSM,92688,1
+DISMISSED REQUEST,DISMISSED REQUEST,,,Thrvy Automated CRM,,,Aliso Viejo,92656,1
+DISMISSED REQUEST,DISMISSED REQUEST,,,HES Notary,,,Mission Viejo,,1
