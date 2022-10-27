@@ -12,6 +12,10 @@ h1 {
     /* border: pink solid 1pt; */
 }
 
+p {
+    font-size: 1.2rem;
+}
+
 form {
     /* border: pink solid 1pt; */
     margin: 0;
@@ -20,6 +24,10 @@ form {
 input {
     margin: 0.2rem 0;
     font-size: 1.2rem;
+}
+
+#index {
+    max-width: 2rem;
 }
 
 button {
