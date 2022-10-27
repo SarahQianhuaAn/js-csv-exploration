@@ -1,12 +1,14 @@
-let data;
+let waypointsOfRoutes;
 
-async function getWaypoints() {
-  // const response = await fetch("routes.csv");
-  // const data = await response.text();
+function getWaypoints(data) {
   const rows = data.split(/\n|\r\n/).slice(1);
   var currentRouteIndex = "";
   var addresses = [];
   let waypoints = [];
+
+  // loop through every row of the processed text to get geocoded addresses
+  // and put them into different addresses groups (arrays) in the waypoints array, 
+  // based on their route index
   rows.forEach((row) => {
     const columns = row.split(",");
     const routeIndex = columns[0];
@@ -22,6 +24,7 @@ async function getWaypoints() {
       addresses.push({ location: geocodedAddress, stopover: true });
     }
   });
+
   if (addresses.length > 0) {
     waypoints.push(addresses);
   }
@@ -29,18 +32,25 @@ async function getWaypoints() {
   return waypoints;
 }
 
-async function calcRoute(directionsService, directionsRenderer) {
-  var depot = document.getElementById("depot").value;
+function calcRoute(directionsService, directionsRenderer) {
+  
   var index = parseInt(document.getElementById("index").value);
-  let waypointsOfRoutes = await getWaypoints();
 
+  if (!waypointsOfRoutes){
+    return;
+  }
+
+  var depot = document.getElementById("depot").value;
+
+  // create a directions request
   const directionsRequest = {
     origin: depot,
     destination: depot,
     waypoints: waypointsOfRoutes[index - 1],
     travelMode: "DRIVING",
   };
-
+  
+  // use directions service to make rendering of route based on the request
   directionsService.route(directionsRequest, (result, status) => {
     if (status == google.maps.DirectionsStatus.OK) {
       directionsRenderer.setDirections(result);
@@ -62,15 +72,20 @@ function initAutocomplete() {
 function initMap() {
   const csvFile = document.getElementById("csvFile");
   const reader = new FileReader();
+  const routingButton = document.getElementById("routing");
+  const mapCenter = {lat:33.7175, lng:-117.8311};
 
+  // initialize a map centered on the depot
   const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 9,
-    center: { lat: 33.7175, lng: -117.8311 },
+    center: mapCenter,
   });
 
+  // create google maps service and renderer objects
   const directionsService = new google.maps.DirectionsService();
   const directionsRenderer = new google.maps.DirectionsRenderer();
 
+  // set the map and directions panel on the web page
   directionsRenderer.setMap(map);
   directionsRenderer.setPanel(document.getElementById("directionsPanel"));
 
@@ -79,6 +94,7 @@ function initMap() {
   // const prevButton = document.getElementById("prev");
   // const nextButton = document.getElementById("next");
 
+  // implement reading of inputted csv files
   csvFile.addEventListener("change", (e) => {
     e.preventDefault();
     const [myCSV] = document.getElementById("csvFile").files;
@@ -87,18 +103,19 @@ function initMap() {
     }
   });
 
+  // get the read result of the inputted csv files
   reader.addEventListener(
     "load",
     () => {
-      // console.log(reader.result)
-      data = reader.result;
+      let csvRoutes = reader.result;
+      waypointsOfRoutes = getWaypoints(csvRoutes);
+      // show users how many routes are extracted console.log(waypointsOfRoutes.length);
     },
     false
   );
 
-  var goButton = document.getElementById("go");
-
-  goButton.addEventListener("click", () => {
+  // implement rendering of route directions on the map
+  routingButton.addEventListener("click", () => {
     calcRoute(directionsService, directionsRenderer);
   });
 }
