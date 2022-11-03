@@ -1,4 +1,4 @@
-let waypointsOfRoutes;
+var waypointsOfRoutes;
 
 function getWaypoints(data) {
   const rows = data.split(/\n|\r\n/).slice(1);
@@ -73,9 +73,10 @@ function initMap() {
   const csvFile = document.getElementById("csvFile");
   const reader = new FileReader();
   const routingButton = document.getElementById("routing");
+  // set default map center to around orange county
   const mapCenter = {lat:33.7175, lng:-117.8311};
 
-  // initialize a map centered on the depot
+  // initialize a map
   const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 9,
     center: mapCenter,
@@ -90,9 +91,6 @@ function initMap() {
   directionsRenderer.setPanel(document.getElementById("directionsPanel"));
 
   initAutocomplete();
-
-  // const prevButton = document.getElementById("prev");
-  // const nextButton = document.getElementById("next");
 
   // implement reading of inputted csv files
   csvFile.addEventListener("change", (e) => {
@@ -110,11 +108,32 @@ function initMap() {
       let csvRoutes = reader.result;
       waypointsOfRoutes = getWaypoints(csvRoutes);
       // show users how many routes are extracted 
-      console.log(waypointsOfRoutes.length);
       document.getElementById("report").innerHTML = `Found ${waypointsOfRoutes.length} routes! Route Index 1 to ${waypointsOfRoutes.length}.`
     },
     false
   );
+  const prevButton = document.getElementById("prev");
+  const nextButton = document.getElementById("next");
+
+  prevButton.addEventListener("click", () => {
+    if (!document.getElementById("index").value) {
+      return;
+    }
+    if (parseInt(document.getElementById("index").value) <= 1) {
+      return;
+    }
+    document.getElementById("index").value = parseInt(document.getElementById("index").value) - 1;
+  })
+
+  nextButton.addEventListener("click", () => {
+    if (!waypointsOfRoutes) {
+      return;
+    }
+    if (parseInt(document.getElementById("index").value) >= waypointsOfRoutes.length) {
+      return;
+    }
+    document.getElementById("index").value = parseInt(document.getElementById("index").value) + 1;
+  })
 
   // implement rendering of route directions on the map
   routingButton.addEventListener("click", () => {
