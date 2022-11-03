@@ -16,6 +16,11 @@ p {
     font-size: 1.2rem;
 }
 
+#report {
+    font-weight: bold;
+    color: blue;
+}
+
 form {
     /* border: pink solid 1pt; */
     margin: 0;

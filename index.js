@@ -109,7 +109,9 @@ function initMap() {
     () => {
       let csvRoutes = reader.result;
       waypointsOfRoutes = getWaypoints(csvRoutes);
-      // show users how many routes are extracted console.log(waypointsOfRoutes.length);
+      // show users how many routes are extracted 
+      console.log(waypointsOfRoutes.length);
+      document.getElementById("report").innerHTML = `Found ${waypointsOfRoutes.length} routes! Route Index 1 to ${waypointsOfRoutes.length}.`
     },
     false
   );
