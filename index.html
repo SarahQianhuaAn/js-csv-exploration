@@ -16,15 +16,25 @@
     ></script>
 
     <h1>Google Maps Navigation</h1>
-    <input type="file" id="csvFile" accept=".csv" />
-    <p id="report"></p>
-
-    <p>Depot Location</p><input type="text" id="depot" placeholder="Depot Location"/>
-    <p>Route Index</p><input type="text" id="index" placeholder="1"/>
-    
-    <button id="prev">Previous Route</button>
-    <button id="next">Next Route</button>
-    <button id="routing">Generate Directions</button>
+    <div class="wrapper">
+      <input type="file" id="csvFile" accept=".csv" />
+    </div>
+    <div class="wrapper">
+      <p id="report"></p>
+    </div>
+    <div class="wrapper">
+      <p>Depot Location</p>
+      <input type="text" id="depot" placeholder="Depot Location" />
+    </div>
+    <div class="wrapper">
+      <p>Route Index</p>
+      <input type="text" id="index" value="1" />
+      <button id="routing">Generate Directions</button>
+    </div>
+    <div class="wrapper">
+      <button id="prev">Previous Route</button>
+      <button id="next">Next Route</button>
+    </div>
     <div id="map"></div>
     <div id="directionsPanel"></div>
   </body>

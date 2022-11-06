@@ -5,25 +5,32 @@ body {
 
 #map {
     height: 400px;
-    width: 75%;
+    width: 640px;
 }
 
-h1 {
-    /* border: pink solid 1pt; */
+#directionsPanel {
+    width: 640px;
 }
 
 p {
     font-size: 1.2rem;
+    margin: 0;
 }
 
 #report {
     font-weight: bold;
-    color: blue;
+    color: rgb(0, 0, 164);
+}
+
+.wrapper {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin: 1rem 0;
 }
 
 form {
-    /* border: pink solid 1pt; */
-    margin: 0;
+    /* margin: 0; */
 }
 
 input {
@@ -36,15 +43,16 @@ input {
 }
 
 button {
-    /* border:pink solid 1pt; */
-    /* border-radius: 0.5rem; */
-    border: none;
+    /* border: solid coral 1px; */
+    border:none;
+    border-radius: 0.2rem;
     font-size: 1.2rem;
-    margin: 0.5rem 0;
-    padding: 0.7rem;
-    background-color: rgb(228, 225, 225);
+    margin: 0 0.2rem;
+    padding: 0.3rem 0.7rem;
+    background-color: rgb(200, 200, 240);
 }
 
 button:hover {
     cursor: pointer;
+    background-color: rgb(150, 150, 240);
 }

@@ -7,7 +7,7 @@ function getWaypoints(data) {
   let waypoints = [];
 
   // loop through every row of the processed text to get geocoded addresses
-  // and put them into different addresses groups (arrays) in the waypoints array, 
+  // and put them into different addresses groups (arrays) in the waypoints array,
   // based on their route index
   rows.forEach((row) => {
     const columns = row.split(",");
@@ -33,10 +33,9 @@ function getWaypoints(data) {
 }
 
 function calcRoute(directionsService, directionsRenderer) {
-  
   var index = parseInt(document.getElementById("index").value);
 
-  if (!waypointsOfRoutes){
+  if (!waypointsOfRoutes) {
     return;
   }
 
@@ -49,7 +48,7 @@ function calcRoute(directionsService, directionsRenderer) {
     waypoints: waypointsOfRoutes[index - 1],
     travelMode: "DRIVING",
   };
-  
+
   // use directions service to make rendering of route based on the request
   directionsService.route(directionsRequest, (result, status) => {
     if (status == google.maps.DirectionsStatus.OK) {
@@ -61,12 +60,8 @@ function calcRoute(directionsService, directionsRenderer) {
   });
 }
 
-function newAutocomplete(id) {
+function initAutocomplete(id) {
   new google.maps.places.Autocomplete(document.getElementById(id));
-}
-
-function initAutocomplete() {
-  newAutocomplete("depot");
 }
 
 function initMap() {
@@ -74,7 +69,7 @@ function initMap() {
   const reader = new FileReader();
   const routingButton = document.getElementById("routing");
   // set default map center to around orange county
-  const mapCenter = {lat:33.7175, lng:-117.8311};
+  const mapCenter = { lat: 33.7175, lng: -117.8311 };
 
   // initialize a map
   const map = new google.maps.Map(document.getElementById("map"), {
@@ -90,7 +85,7 @@ function initMap() {
   directionsRenderer.setMap(map);
   directionsRenderer.setPanel(document.getElementById("directionsPanel"));
 
-  initAutocomplete();
+  initAutocomplete("depot");
 
   // implement reading of inputted csv files
   csvFile.addEventListener("change", (e) => {
@@ -107,8 +102,10 @@ function initMap() {
     () => {
       let csvRoutes = reader.result;
       waypointsOfRoutes = getWaypoints(csvRoutes);
-      // show users how many routes are extracted 
-      document.getElementById("report").innerHTML = `Found ${waypointsOfRoutes.length} routes! Route Index 1 to ${waypointsOfRoutes.length}.`
+      // show users how many routes are extracted
+      document.getElementById(
+        "report"
+      ).innerHTML = `Found ${waypointsOfRoutes.length} routes! Route Index 1 to ${waypointsOfRoutes.length}.`;
     },
     false
   );
@@ -122,22 +119,38 @@ function initMap() {
     if (parseInt(document.getElementById("index").value) <= 1) {
       return;
     }
-    document.getElementById("index").value = parseInt(document.getElementById("index").value) - 1;
-  })
+    document.getElementById("index").value =
+      parseInt(document.getElementById("index").value) - 1;
+    calcRoute(directionsService, directionsRenderer);
+  });
 
   nextButton.addEventListener("click", () => {
     if (!waypointsOfRoutes) {
       return;
     }
-    if (parseInt(document.getElementById("index").value) >= waypointsOfRoutes.length) {
+    if (
+      parseInt(document.getElementById("index").value) >=
+      waypointsOfRoutes.length
+    ) {
       return;
     }
-    document.getElementById("index").value = parseInt(document.getElementById("index").value) + 1;
-  })
+    document.getElementById("index").value =
+      parseInt(document.getElementById("index").value) + 1;
+    calcRoute(directionsService, directionsRenderer);
+  });
 
   // implement rendering of route directions on the map
   routingButton.addEventListener("click", () => {
     calcRoute(directionsService, directionsRenderer);
+  });
+
+  let depotInput = document.getElementById("depot");
+  if (sessionStorage.getItem("depot")) {
+    depotInput.value = sessionStorage.getItem("depot");
+  }
+  depotInput.addEventListener("focusout", () => {
+    sessionStorage.setItem("depot", depotInput.value);
+    console.log(sessionStorage.getItem("depot"))
   });
 }
 
