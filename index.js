@@ -67,7 +67,6 @@ function initAutocomplete(id) {
 function initMap() {
   const csvFile = document.getElementById("csvFile");
   const reader = new FileReader();
-  const routingButton = document.getElementById("routing");
   // set default map center to around orange county
   const mapCenter = { lat: 33.7175, lng: -117.8311 };
 
@@ -111,6 +110,7 @@ function initMap() {
   );
   const prevButton = document.getElementById("prev");
   const nextButton = document.getElementById("next");
+  const routingButton = document.getElementById("routing");
 
   prevButton.addEventListener("click", () => {
     if (!document.getElementById("index").value) {
@@ -152,6 +152,15 @@ function initMap() {
     sessionStorage.setItem("depot", depotInput.value);
     console.log(sessionStorage.getItem("depot"))
   });
+
+  const printButton = document.getElementById("print");
+  const printAllButton = document.getElementById("print-all")
+  printButton.addEventListener("click", () => {
+    window.print();
+  // })
+  // printAllButton.addEventListener("click", () => {
+
+  // })
 }
 
 window.initMap = initMap;
