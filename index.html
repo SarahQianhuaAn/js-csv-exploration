@@ -8,7 +8,7 @@
     <title>Document</title>
   </head>
   <body>
-    <script src="./index.js" type="module"></script>
+    <script src="./index.js" defer type="module"></script>
     <link rel="stylesheet" type="text/css" href="./index.css" />
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB02TAzAAb50lmkP3Qct4JlWOS9__AzUxs&libraries=places&callback=initMap&v=weekly"
@@ -26,7 +26,7 @@
       <p>Depot Location</p>
       <input type="text" id="depot" placeholder="Depot Location" />
     </div>
-    <div class="wrapper">
+    <div class="route-info">
       <p class="route-index">Route Index</p>
       <input class="route-index" type="text" id="index" value="1" />
       <button id="routing">Generate Directions</button>
@@ -37,6 +37,7 @@
       <button id="print">Print Route</button>
       <button id="print-all">Print All Routes</button>
     </div>
+    <div id="table"></div>
     <div id="map"></div>
     <div id="directionsPanel"></div>
   </body>

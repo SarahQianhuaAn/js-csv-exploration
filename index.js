@@ -1,45 +1,68 @@
+import { getWaypoints, displayTable } from "./csvProcessing.js";
+import { initAutocomplete } from "./googleMap.js";
+
 var waypointsOfRoutes;
+var csvRoutes;
 
-function getWaypoints(data) {
-  const rows = data.split(/\n|\r\n/).slice(1);
-  var currentRouteIndex = "";
-  var addresses = [];
-  let waypoints = [];
+const csvFile = document.getElementById("csvFile");
+const reader = new FileReader();
 
-  // loop through every row of the processed text to get geocoded addresses
-  // and put them into different addresses groups (arrays) in the waypoints array,
-  // based on their route index
-  rows.forEach((row) => {
-    const columns = row.split(",");
-    const routeIndex = columns[0];
-    const geocodedAddress = columns[3];
-    if (routeIndex != "DISMISSED REQUEST") {
-      if (routeIndex != currentRouteIndex) {
-        if (addresses.length > 0) {
-          waypoints.push(addresses);
-        }
-        currentRouteIndex = routeIndex;
-        addresses = [];
-      }
-      addresses.push({ location: geocodedAddress, stopover: true });
-    }
-  });
+const prevButton = document.getElementById("prev");
+const nextButton = document.getElementById("next");
+const routingButton = document.getElementById("routing");
 
-  if (addresses.length > 0) {
-    waypoints.push(addresses);
+const indexInput = document.getElementById("index");
+const depotInput = document.getElementById("depot");
+
+const printButton = document.getElementById("print");
+const printAllButton = document.getElementById("print-all");
+
+// implement reading of inputted csv files
+csvFile.addEventListener("change", (e) => {
+  e.preventDefault();
+  const [myCSV] = document.getElementById("csvFile").files;
+  if (myCSV) {
+    reader.readAsText(myCSV);
   }
-  // console.log(waypoints);
-  return waypoints;
+});
+
+// get the read result of the inputted csv files
+reader.addEventListener(
+  "load",
+  () => {
+    csvRoutes = reader.result;
+    waypointsOfRoutes = getWaypoints(csvRoutes);
+    // show users how many routes are extracted
+    document.getElementById(
+      "report"
+    ).innerHTML = `Found ${waypointsOfRoutes.length} routes! Route Index 1 to ${waypointsOfRoutes.length}.`;
+  },
+  false
+);
+
+if (sessionStorage.getItem("depot")) {
+  depotInput.value = sessionStorage.getItem("depot");
 }
 
-function calcRoute(directionsService, directionsRenderer) {
-  var index = parseInt(document.getElementById("index").value);
+depotInput.addEventListener("focusout", () => {
+  sessionStorage.setItem("depot", depotInput.value);
+  console.log(sessionStorage.getItem("depot"));
+});
+
+printButton.addEventListener("click", () => {
+  window.print();
+});
+// printAllButton.addEventListener("click", () => {
+// })
+
+function calcRoute(service, renderer) {
+  var index = parseInt(indexInput.value);
 
   if (!waypointsOfRoutes) {
     return;
   }
 
-  var depot = document.getElementById("depot").value;
+  var depot = depotInput.value;
 
   // create a directions request
   const directionsRequest = {
@@ -50,9 +73,9 @@ function calcRoute(directionsService, directionsRenderer) {
   };
 
   // use directions service to make rendering of route based on the request
-  directionsService.route(directionsRequest, (result, status) => {
+  service.route(directionsRequest, (result, status) => {
     if (status == google.maps.DirectionsStatus.OK) {
-      directionsRenderer.setDirections(result);
+      renderer.setDirections(result);
       console.log(directionsRequest);
     } else {
       console.error("Direction request failed.");
@@ -60,13 +83,7 @@ function calcRoute(directionsService, directionsRenderer) {
   });
 }
 
-function initAutocomplete(id) {
-  new google.maps.places.Autocomplete(document.getElementById(id));
-}
-
 function initMap() {
-  const csvFile = document.getElementById("csvFile");
-  const reader = new FileReader();
   // set default map center to around orange county
   const mapCenter = { lat: 33.7175, lng: -117.8311 };
 
@@ -86,41 +103,15 @@ function initMap() {
 
   initAutocomplete("depot");
 
-  // implement reading of inputted csv files
-  csvFile.addEventListener("change", (e) => {
-    e.preventDefault();
-    const [myCSV] = document.getElementById("csvFile").files;
-    if (myCSV) {
-      reader.readAsText(myCSV);
-    }
-  });
-
-  // get the read result of the inputted csv files
-  reader.addEventListener(
-    "load",
-    () => {
-      let csvRoutes = reader.result;
-      waypointsOfRoutes = getWaypoints(csvRoutes);
-      // show users how many routes are extracted
-      document.getElementById(
-        "report"
-      ).innerHTML = `Found ${waypointsOfRoutes.length} routes! Route Index 1 to ${waypointsOfRoutes.length}.`;
-    },
-    false
-  );
-  const prevButton = document.getElementById("prev");
-  const nextButton = document.getElementById("next");
-  const routingButton = document.getElementById("routing");
-
   prevButton.addEventListener("click", () => {
-    if (!document.getElementById("index").value) {
+    if (!indexInput.value) {
       return;
     }
-    if (parseInt(document.getElementById("index").value) <= 1) {
+    if (parseInt(indexInput.value) <= 1) {
       return;
     }
-    document.getElementById("index").value =
-      parseInt(document.getElementById("index").value) - 1;
+    indexInput.value =
+      parseInt(indexInput.value) - 1;
     calcRoute(directionsService, directionsRenderer);
   });
 
@@ -129,38 +120,21 @@ function initMap() {
       return;
     }
     if (
-      parseInt(document.getElementById("index").value) >=
+      parseInt(indexInput.value) >=
       waypointsOfRoutes.length
     ) {
       return;
     }
-    document.getElementById("index").value =
-      parseInt(document.getElementById("index").value) + 1;
+    indexInput.value =
+      parseInt(indexInput.value) + 1;
     calcRoute(directionsService, directionsRenderer);
   });
 
   // implement rendering of route directions on the map
   routingButton.addEventListener("click", () => {
+    displayTable(csvRoutes, indexInput.value);
     calcRoute(directionsService, directionsRenderer);
   });
-
-  let depotInput = document.getElementById("depot");
-  if (sessionStorage.getItem("depot")) {
-    depotInput.value = sessionStorage.getItem("depot");
-  }
-  depotInput.addEventListener("focusout", () => {
-    sessionStorage.setItem("depot", depotInput.value);
-    console.log(sessionStorage.getItem("depot"))
-  });
-
-  const printButton = document.getElementById("print");
-  const printAllButton = document.getElementById("print-all")
-  printButton.addEventListener("click", () => {
-    window.print();
-  // })
-  // printAllButton.addEventListener("click", () => {
-
-  // })
 }
 
 window.initMap = initMap;
