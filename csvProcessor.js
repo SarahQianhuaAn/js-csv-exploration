@@ -59,7 +59,6 @@ export default class CSVProcessor {
   displayRouteAsTable(index) {
     var table = "<table>";
     var waypoints = this.waypointsOfRoutes_.at(index);
-    // console.log(waypoints);
     for (var i = 0; i < waypoints.length; i++){
       table += `<tr> <td>${i + 1}</td> <td>${waypoints[i].location}</td> </tr>`
     }

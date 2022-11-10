@@ -80,8 +80,4 @@ button:hover {
     .wrapper, button, #map {
         display: none;
     }
-
-    /* .route-info, #map, #directionsPanel {
-        visibility: visible;
-    } */
 }
