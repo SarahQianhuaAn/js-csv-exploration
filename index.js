@@ -1,8 +1,7 @@
-import { getWaypoints, displayTable } from "./csvProcessing.js";
+import CSVProcessor from "./csvProcessor.js";
 import { initAutocomplete } from "./googleMap.js";
 
-var waypointsOfRoutes;
-var csvRoutes;
+var processor = new CSVProcessor();
 
 const csvFile = document.getElementById("csvFile");
 const reader = new FileReader();
@@ -30,12 +29,12 @@ csvFile.addEventListener("change", (e) => {
 reader.addEventListener(
   "load",
   () => {
-    csvRoutes = reader.result;
-    waypointsOfRoutes = getWaypoints(csvRoutes);
+    processor.routes = reader.result;
+    processor.updateWaypoints();
     // show users how many routes are extracted
     document.getElementById(
       "report"
-    ).innerHTML = `Found ${waypointsOfRoutes.length} routes! Route Index 1 to ${waypointsOfRoutes.length}.`;
+    ).innerHTML = `Found ${processor.routeCount} routes! Route Index 1 to ${processor.routeCount}.`;
   },
   false
 );
@@ -46,7 +45,7 @@ if (sessionStorage.getItem("depot")) {
 
 depotInput.addEventListener("focusout", () => {
   sessionStorage.setItem("depot", depotInput.value);
-  console.log(sessionStorage.getItem("depot"));
+  // console.log(sessionStorage.getItem("depot"));
 });
 
 printButton.addEventListener("click", () => {
@@ -56,19 +55,16 @@ printButton.addEventListener("click", () => {
 // })
 
 function calcRoute(service, renderer) {
-  var index = parseInt(indexInput.value);
-
-  if (!waypointsOfRoutes) {
-    return;
-  }
-
+  var index = parseInt(indexInput.value) - 1;
   var depot = depotInput.value;
+  document.getElementById("directionsTable").innerHTML =
+    processor.displayRouteAsTable(index);
 
   // create a directions request
   const directionsRequest = {
     origin: depot,
     destination: depot,
-    waypoints: waypointsOfRoutes[index - 1],
+    waypoints: processor.waypointsOfRoutes[index],
     travelMode: "DRIVING",
   };
 
@@ -76,7 +72,7 @@ function calcRoute(service, renderer) {
   service.route(directionsRequest, (result, status) => {
     if (status == google.maps.DirectionsStatus.OK) {
       renderer.setDirections(result);
-      console.log(directionsRequest);
+      // console.log(directionsRequest);
     } else {
       console.error("Direction request failed.");
     }
@@ -104,35 +100,37 @@ function initMap() {
   initAutocomplete("depot");
 
   prevButton.addEventListener("click", () => {
-    if (!indexInput.value) {
+    if (
+      !processor.waypointsOfRoutes ||
+      !indexInput.value ||
+      parseInt(indexInput.value) <= 1
+    ) {
       return;
     }
-    if (parseInt(indexInput.value) <= 1) {
-      return;
-    }
-    indexInput.value =
-      parseInt(indexInput.value) - 1;
+    indexInput.value = parseInt(indexInput.value) - 1;
     calcRoute(directionsService, directionsRenderer);
   });
 
   nextButton.addEventListener("click", () => {
-    if (!waypointsOfRoutes) {
-      return;
-    }
     if (
-      parseInt(indexInput.value) >=
-      waypointsOfRoutes.length
+      !processor.waypointsOfRoutes ||
+      !indexInput.value ||
+      parseInt(indexInput.value) >= processor.waypointsOfRoutes.length
     ) {
       return;
     }
-    indexInput.value =
-      parseInt(indexInput.value) + 1;
+    indexInput.value = parseInt(indexInput.value) + 1;
     calcRoute(directionsService, directionsRenderer);
   });
 
   // implement rendering of route directions on the map
   routingButton.addEventListener("click", () => {
-    displayTable(csvRoutes, indexInput.value);
+    if (
+      !processor.waypointsOfRoutes ||
+      !indexInput.value ||
+      parseInt(indexInput.value) >= processor.waypointsOfRoutes.length ||
+      parseInt(indexInput.value) <= 1
+    )
     calcRoute(directionsService, directionsRenderer);
   });
 }

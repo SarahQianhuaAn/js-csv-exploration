@@ -3,17 +3,36 @@ body {
     font-family: sans-serif;
 }
 
-#table {
+#directionsTable {
     width: 640px;
+    height: fit-content;
+    margin: 1rem 0;
 }
 
+table {
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid #f0efef;
+    text-align: left;
+    padding: 0.3rem;
+}
+
+tr:nth-child(even) {
+    background-color: #f0efef;
+}
+
+
 #map {
+    /* border: 1px hotpink solid; */
     height: 400px;
     width: 640px;
 }
 
 #directionsPanel {
     width: 640px;
+    font-size: 0.7rem;
 }
 
 p {
@@ -31,10 +50,6 @@ p {
     gap: 1rem;
     align-items: center;
     margin: 1rem 0;
-}
-
-form {
-    /* margin: 0; */
 }
 
 input {
